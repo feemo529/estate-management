@@ -45,7 +45,7 @@ public class FileController {
 		//获取当前项目所在绝对路径
 		String absolutePath = System.getProperty("user.dir");
 		//文件上传后所在绝对路径
-		String savePath = absolutePath+"/src/main/resources/static/fileupload/";
+		String savePath = absolutePath+"/estate-management/src/main/resources/static/fileupload/";
 		//保存在数据库的文件地址
 		String saveUrl = "/fileupload/";
 		// 定义允许上传的文件扩展名
@@ -123,7 +123,7 @@ public class FileController {
 		//获取当前项目所在绝对路径
 		String absolutePath = System.getProperty("user.dir");
 		//文件上传后所在绝对路径
-		String savePath = absolutePath+"/src/main/resources/static/fileupload/";
+		String savePath = absolutePath+"/estate-management/src/main/resources/static/fileupload/";
 		File file = new File(savePath+name);
 		if (file.exists()){//文件是否存在
 			file.delete();//删除文件

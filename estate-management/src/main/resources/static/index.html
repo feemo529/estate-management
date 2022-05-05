@@ -33,7 +33,7 @@
 
             <ul class="layui-nav" lay-filter="">
                 <li class="layui-nav-item" id="time" style="margin-right: 50px;font-weight: 300;font-size: 16px;color: #fff;position: absolute;left: -250px;top: 0"></li>
-                <li class="layui-nav-item"><img src="./images/tx.svg" class="layui-circle" " width="35px" height="35px" alt=""></li>
+                <li class="layui-nav-item"><img src="./fileupload/7662f1a6-07fe-4eee-891a-3dd614aa3dce.jpg" class="layui-circle" " width="35px" height="35px" alt=""></li>
                 <li class="new-nav " id="gonggao">
                     <i></i>
                     <a href="#"><i class="iconfont">&#xe6bc;</i><span class="layui-badge">4</span></a>
@@ -310,24 +310,7 @@
      * 2019年8月17日19:43:15
      */
     function logout() {
-
-        $.ajax({
-            type:"post",
-            url:"xxxxx",
-            data:{e:1},
-            dataType:"json",
-            success:function (data) {
-                if(data.status==1){
-                    layer.msg(data.info,{icon:1,time:1000});
-                    setTimeout("window.location.href='xxxx'",2000);return false;
-                    return false;
-                }else{
-                    layer.msg(data.info,{icon:5,time:2000});return false;
-                }
-            }
-
-        })
-        return false;
+        window.location.href='login.html'
     }
 
     function one_set(title,url,w,h){
