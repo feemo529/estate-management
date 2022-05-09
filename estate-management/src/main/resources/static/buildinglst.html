@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/main.css" media="all" />
     <script type="text/javascript" src="lib/loading/okLoading.js"></script>
     <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/index.css" />
   </head>
   <body>
     <div class="x-nav">
@@ -20,38 +21,51 @@
         <a><cite>房产管理</cite></a>
         <a><cite>栋数管理</cite></a>
       </span>
-      <a class="layui-btn layui-btn-small" style="line-height: 1.6em; margin-top: 3px; float: right" href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height: 30px">ဂ</i></a>
+      <a
+        class="layui-btn layui-btn-small"
+        style="line-height: 1.6em; margin-top: 3px; float: right"
+        href="javascript:location.replace(location.href);"
+        title="刷新"
+        ><i class="layui-icon" style="line-height: 30px">ဂ</i></a
+      >
     </div>
-    <div class="x-body">
-      <form class="layui-form x-center" action="" style="width: 800px">
-        <div class="layui-form-pane" style="margin-top: 15px">
-          <div class="layui-form-item">
-            <label class="layui-form-label">日期范围</label>
-            <div class="layui-input-inline">
-              <input class="layui-input" placeholder="开始日" id="LAY_demorange_s" />
-            </div>
-            <div class="layui-input-inline">
-              <input class="layui-input" placeholder="截止日" id="LAY_demorange_e" />
-            </div>
-            <div class="layui-input-inline">
-              <input type="text" name="username" placeholder="标题" autocomplete="off" class="layui-input" />
-            </div>
-            <div class="layui-input-inline" style="width: 80px">
-              <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-            </div>
-          </div>
-        </div>
-      </form>
+    <div class="x-body" id="app">
+      <!-- 时间组件 -->
+      <span class="demonstration">时间范围</span>
+      <el-date-picker
+        @change="dateChange"
+        v-model="selectDate"
+        type="daterange"
+        range-separator="--"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions"
+      ></el-date-picker>
+      <span class="demonstration">搜索关键字</span>
+      <el-input v-model="searchMap.name" style="width: 20%" placeholder="请输入小区名称"></el-input>
+      <el-button type="warning" icon="el-icon-search" @click="search()">搜索</el-button>
+      <!-- 页面主体内容 -->
       <xblock>
-        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button>
-        <button class="layui-btn" onclick="building_add('添加栋数','buildingadd.html','1000','600')"><i class="layui-icon">&#xe608;</i>添加</button>
-        <span class="x-right" style="line-height: 40px">共有数据：<span class="layui-badge">2</span> 条</span>
+        <button class="layui-btn layui-btn-danger" @click="delAll()" :disabled="checkedIDs == ''">
+          <i class="layui-icon">&#xe640;</i>批量删除
+        </button>
+        <button class="layui-btn" @click="admin_add('添加','buildingadd.html','1000','600')">
+          <i class="layui-icon">&#xe608;</i>添加
+        </button>
+        <span class="x-right" style="line-height: 40px"
+          >共有数据：<span class="layui-badge">2</span> 条</span
+        >
       </xblock>
       <table class="layui-table">
         <thead>
           <tr>
             <th>
-              <input type="checkbox" name="" value="" />
+              <input
+                type="checkbox"
+                id="allChecked"
+                :checked="checkedIDs.length === buildingList.length"
+                @click="allChecked"
+              />
             </th>
             <th>ID</th>
             <th>所属小区</th>
@@ -63,127 +77,295 @@
             <th>操作</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
+        <tbody id="x-img">
+          <tr v-for="item in buildingList" :key="item.id">
             <td>
-              <input type="checkbox" value="1" name="" />
+              <input type="checkbox" :value="item.id" :id="'id'+item.id" v-model="checkedIDs" />
             </td>
-            <td>2</td>
-            <td>金华万府</td>
-            <td>CJ20191210001</td>
-            <td>A栋</td>
-            <td>200</td>
-            <td>金华万府A栋</td>
-            <td>2019-12-10 21:55:17</td>
+            <td>{{item.id}}</td>
+            <td>{{item.communityName}}</td>
+            <td>{{item.communityId}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.totalHouseholds}}</td>
+            <td>{{item.description}}</td>
+            <td>{{dateFormat(item.createTime)}}</td>
             <td class="td-manage">
-              <a title="编辑" href="javascript:;" onclick="building_edit('编辑','buildingadd.html','2','1000','600')" class="ml-5" style="text-decoration: none">
+              <!-- 编辑按钮 -->
+              <a
+                title="编辑"
+                href="javascript:;"
+                @click="building_edit('编辑','buildingadd.html',item.id,'1000','600')"
+                class="ml-5"
+                style="text-decoration: none"
+              >
                 <i class="layui-icon">&#xe642;</i>
               </a>
-              <a title="删除" href="javascript:;" onclick="building_del(this,'2')" style="text-decoration: none">
+              <a
+                title="删除"
+                href="javascript:;"
+                @click="admin_delone(item.id)"
+                style="text-decoration: none"
+              >
                 <i class="layui-icon">&#xe640;</i>
               </a>
             </td>
           </tr>
         </tbody>
       </table>
-
-      <div id="page">
-        <ul class="pagination">
-          <li class="disabled"><span>&laquo;</span></li>
-          <li class="active"><span>1</span></li>
-          <li><a href="/xiyuan/Home/buildinglst?page=2">2</a></li>
-          <li><a href="/xiyuan/Home/buildinglst?page=2">&raquo;</a></li>
-        </ul>
-      </div>
+      <!-- 分页 -->
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="prev, pager, next, sizes"
+        :page-sizes="[2,10,20]"
+        style="text-align: right"
+        :total="total"
+      >
+      </el-pagination>
     </div>
     <script src="lib/layui/layui.js" charset="utf-8"></script>
     <script src="js/x-layui.js" charset="utf-8"></script>
+    <!-- 导入jS -->
+    <script src="js/vue.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="js/moment.min.js"></script>
     <script>
-      layui.use(['laydate', 'element', 'laypage', 'layer'], function () {
-        $ = layui.jquery //jquery
-        laydate = layui.laydate //日期插件
-        lement = layui.element() //面包导航
-        laypage = layui.laypage //分页
-        layer = layui.layer //弹出层
-        okLoading.close($)
-
-        //以上模块根据需要引入
-
-        var start = {
-          min: laydate.now(),
-          max: '2099-06-16 23:59:59',
-          istoday: false,
-          choose: function (datas) {
-            end.min = datas //开始日选好后，重置结束日的最小日期
-            end.start = datas //将结束日的初始值设定为开始日
+      let app = new Vue({
+        el: '#app',
+        data: {
+          checkedIDs: [],
+          buildingList: [],
+          total: 10,
+          searchMap: { startTime: '', endTime: '', name: '', pageNum: '1', pageSize: '2' },
+          selectDate: ['', ''],
+          pickerOptions: {
+            shortcuts: [
+              {
+                text: '最近一周',
+                onClick(picker) {
+                  const end = new Date()
+                  const start = new Date()
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+                  picker.$emit('pick', [start, end])
+                }
+              },
+              {
+                text: '最近一个月',
+                onClick(picker) {
+                  const end = new Date()
+                  const start = new Date()
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+                  picker.$emit('pick', [start, end])
+                }
+              },
+              {
+                text: '最近三个月',
+                onClick(picker) {
+                  const end = new Date()
+                  const start = new Date()
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+                  picker.$emit('pick', [start, end])
+                }
+              }
+            ]
           }
-        }
-
-        var end = {
-          min: laydate.now(),
-          max: '2099-06-16 23:59:59',
-          istoday: false,
-          choose: function (datas) {
-            start.max = datas //结束日选好后，重置开始日的最大日期
-          }
-        }
-
-        document.getElementById('LAY_demorange_s').onclick = function () {
-          start.elem = this
-          laydate(start)
-        }
-        document.getElementById('LAY_demorange_e').onclick = function () {
-          end.elem = this
-          laydate(end)
-        }
-      })
-
-      //批量删除提交
-      function delAll() {
-        layer.confirm('确认要删除吗？', function (index) {
-          //捉到所有被选中的，发异步进行删除
-          layer.msg('删除成功', { icon: 1 })
-        })
-      }
-
-      /*添加*/
-      function building_add(title, url, w, h) {
-        x_admin_show(title, url, w, h)
-      }
-      //编辑
-      function building_edit(title, url, id, w, h) {
-        url = url + '?id=' + id
-        x_admin_show(title, url, w, h)
-      }
-
-      /*删除*/
-      function building_del(obj, id) {
-        layer.confirm('确认要删除吗？', { icon: 3, title: '提示信息' }, function (index) {
-          $.ajax({
-            type: 'post',
-            url: 'xxx',
-            data: { id: id },
-            dataType: 'json',
-            success: function (data) {
-              if (data.status == 1) {
-                //发异步删除数据
-                $(obj).parents('tr').remove()
-                layer.msg(data.info, { icon: 6, time: 1000 })
-                setTimeout(function () {
-                  window.location.reload()
-                }, 1000)
-                return false
-              } else {
-                layer.msg(data.info, { icon: 5, time: 1000 })
-                return false
+        },
+        methods: {
+          building() {
+            axios.post('/building/search', this.searchMap).then(res => {
+              this.buildingList = res.data.data
+              this.total = res.data.total
+            })
+          },
+          search() {
+            this.searchMap.pageNum = '1'
+            this.building()
+          },
+          admin_delone(id) {
+            this.$confirm('此操作将永久楼栋信息，是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            })
+              .then(() => {
+                //   把选中的id封装到集合中
+                this.checkedIDs.push(id)
+                //   执行删除操作
+                axios.post('/building/del', this.checkedIDs).then(res => {
+                  if (res.data.flag) {
+                    this.$message({
+                      type: 'success',
+                      message: '删除成功!'
+                    })
+                  }
+                })
+                // 把页码设置为1，重新获取数据
+                this.searchMap.pageNum = '1'
+                this.building()
+              })
+              .catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消删除'
+                })
+              })
+          },
+          delAll() {
+            this.$confirm('此操作将永久楼栋信息，是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            })
+              .then(() => {
+                //   执行删除操作
+                axios.post('/building/del', this.checkedIDs).then(res => {
+                  if (res.data.flag) {
+                    this.$message({
+                      type: 'success',
+                      message: '删除成功!'
+                    })
+                  }
+                  this.checkedIDs = []
+                  // 把页码设置为1，重新获取数据
+                  this.searchMap.pageNum = '1'
+                  this.building()
+                })
+              })
+              .catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消删除'
+                })
+              })
+          },
+          // 全选方法
+          allChecked() {
+            if (this.checkedIDs.length === this.buildingList.length) {
+              this.checkedIDs = []
+            } else {
+              this.checkedIDs = []
+              this.buildingList.forEach(item => {
+                this.checkedIDs.push(item.id)
+              })
+            }
+          },
+          //   每页数量发生变化后触发的方法
+          handleSizeChange(pageSize) {
+            this.searchMap.pageSize = pageSize.toString()
+            this.building()
+          },
+          //   页码变化触发方法
+          handleCurrentChange(pageNum) {
+            this.searchMap.pageNum = pageNum.toString()
+            this.building()
+          },
+          //  时间区间发生改变，searchMap中时间区间条件也要发生变化
+          dateChange() {
+            //   没有选择时间，或者清理了时间条件，当前时间区间为空字符串
+            if (this.selectDate == null || this.selectDate.length == 0) {
+              this.searchMap.startTime = ''
+              this.searchMap.endTime = ''
+            } else {
+              // 当时间区间不为空，往searchMap中添加条件
+              if (this.selectDate[0] != null && this.selectDate[0] != '') {
+                this.searchMap.startTime = this.dateFormat(this.selectDate[0])
+              }
+              if (this.selectDate[1] != null && this.selectDate[1] != '') {
+                this.searchMap.endTime = this.dateFormat(this.selectDate[1])
               }
             }
+          },
+          //   日期格式化
+          // date 进行日期格式化的日期； format 格式化的样式
+          dateFormat(date, format) {
+            if (format == null || format == '') {
+              format = 'YYYY-MM-DD HH:mm:ss'
+            }
+            return moment(date).format(format)
+          },
+          /*添加*/
+          admin_add(title, url, w, h) {
+            this.x_admin_show(title, url, w, h)
+          },
+          //编辑
+          building_edit(title, url, id, w, h) {
+            url = url + '?id=' + id
+            this.x_admin_show(title, url, w, h)
+          },
+          /*弹出层*/
+          /*
+            参数解释：
+            title	标题
+            url		请求的url
+            id		需要操作的数据id
+            w		弹出层宽度（缺省调默认值）
+            h		弹出层高度（缺省调默认值）
+        */
+          x_admin_show(title, url, w, h) {
+            if (title == null || title == '') {
+              title = false
+            }
+            if (url == null || url == '') {
+              url = '404.html'
+            }
+            if (w == null || w == '') {
+              w = 800
+            }
+            if (h == null || h == '') {
+              h = $(window).height() - 100
+            }
+
+            layer.open({
+              type: 2,
+              area: [w + 'px', h + 'px'],
+              offset: '30px',
+              fix: true, //不固定
+              maxmin: true,
+              shadeClose: true,
+              shade: 0.4,
+              title: title,
+              content: url,
+              cancel: function (index, layero) {
+                //   关闭弹出刷新数据
+                app.building()
+              }
+            })
+          },
+
+          /*关闭弹出框口*/
+          x_admin_close() {
+            var index = parent.layer.getFrameIndex(window.name)
+            parent.layer.close(index)
+          }
+        },
+        created() {
+          this.building()
+          layui.use(['laydate', 'element', 'laypage', 'layer'], function () {
+            $ = layui.jquery //jquery
+            layer = layui.layer //弹出层
+            okLoading.close($)
+            layer.ready(function () {
+              //为了layer.ext.js加载完毕再执行
+              layer.photos({
+                photos: '#x-img'
+                //,shift: 5 //0-6的选择，指定弹出图片动画类型，默认随机
+              })
+            })
           })
-          //发异步删除数据
-          $(obj).parents('tr').remove()
-          layer.msg('已删除!', { icon: 1, time: 1000 })
-        })
-      }
+          this.search()
+        },
+        computed: {
+          pageSize() {
+            return parseInt(this.searchMap.pageSize)
+          },
+          pageNum() {
+            return parseInt(this.searchMap.pageNum)
+          }
+        }
+      })
     </script>
   </body>
 </html>
