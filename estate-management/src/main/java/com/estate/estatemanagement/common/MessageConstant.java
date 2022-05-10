@@ -14,7 +14,13 @@ public class MessageConstant {
     public static final String COMMUNITY_PIC_DEL_SUCCESS = "小区缩略图删除成功！";
     public static final String COMMUNITY_FIND_BY_ID_SUCCESS = "根据主键获取小区对象成功！";
     public static final String COMMUNITY_UPDATE_STATUS_SUCCESS = "小区状态信息更新成功！";
-    //---------------------------楼栋（Community）操作消息提示信息---------------------------------------
+    //---------------------------楼栋（Building）操作消息提示信息---------------------------------------
+    public static final String BUILDING_SEARCH_SUCCESS="查询楼栋列表信息成功！";
+    public static final String BUILDING_ADD_SUCCESS="新增楼栋信息成功！";
+    public static final String BUILDING_UPDATE_SUCCESS="修改楼栋信息成功！";
+    public static final String BUILDING_DELETE_SUCCESS="删除楼栋信息成功！";
+    public static final String BUILDING_FIND_BY_ID_SUCCESS = "根据主键获取楼栋对象成功！";
+
     //---------------------------系统提示信息----------------------------------------------------------
     public static final String SYSTEM_BUSY = "系统繁忙，请求稍后重试！";
     //---------------------------文件上传提示信息-------------------------------------------------------

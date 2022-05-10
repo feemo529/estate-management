@@ -22,10 +22,22 @@
           <a><cite>小区管理</cite></a>
           <a><cite>{{title}}</cite></a>
         </span>
-        <a class="layui-btn layui-btn-small" style="line-height: 1.6em; margin-top: 3px; float: right" href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height: 30px">ဂ</i></a>
+        <a
+          class="layui-btn layui-btn-small"
+          style="line-height: 1.6em; margin-top: 3px; float: right"
+          href="javascript:location.replace(location.href);"
+          title="刷新"
+          ><i class="layui-icon" style="line-height: 30px">ဂ</i></a
+        >
       </div>
       <div class="x-body">
-        <el-form :model="community" :rules="rules" ref="communityFormRef" label-width="120px" class="demo-ruleForm">
+        <el-form
+          :model="community"
+          :rules="rules"
+          ref="communityFormRef"
+          label-width="120px"
+          class="demo-ruleForm"
+        >
           <el-form-item label="小区名称" prop="name">
             <el-input v-model="community.name"></el-input>
           </el-form-item>
@@ -60,7 +72,15 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="小区缩略图" prop="thumbnail">
-            <el-upload class="upload-demo" action="/estate/fileupload" :on-preview="handlePreview" :on-remove="handleRemove" :on-success="handleSuccess" :file-list="fileList" list-type="picture">
+            <el-upload
+              class="upload-demo"
+              action="/estate/fileupload"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :on-success="handleSuccess"
+              :file-list="fileList"
+              list-type="picture"
+            >
               <el-button size="small" type="primary">点击上传</el-button>
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10M</div>
             </el-upload>
@@ -133,7 +153,11 @@
             console.log(file)
           },
           handleExceed(files, fileList) {
-            this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+            this.$message.warning(
+              `当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
+                files.length + fileList.length
+              } 个文件`
+            )
           },
           //文件删除提示
           beforeRemove(file, fileList) {
@@ -150,8 +174,10 @@
             var method = ''
             if (this.community.id != null) {
               method = 'update'
+              this.community.updateTime = new Date()
             } else {
               method = 'add'
+              this.community.createTime = new Date()
             }
             axios.post('/community/' + method, this.community).then(res => {
               if (res.data.flag) {

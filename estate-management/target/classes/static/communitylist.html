@@ -21,26 +21,51 @@
         <a><cite>小区管理</cite></a>
         <a><cite>小区列表</cite></a>
       </span>
-      <a class="layui-btn layui-btn-small" style="line-height: 1.6em; margin-top: 3px; float: right" href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height: 30px">ဂ</i></a>
+      <a
+        class="layui-btn layui-btn-small"
+        style="line-height: 1.6em; margin-top: 3px; float: right"
+        href="javascript:location.replace(location.href);"
+        title="刷新"
+        ><i class="layui-icon" style="line-height: 30px">ဂ</i></a
+      >
     </div>
     <div class="x-body" id="app">
       <!-- 时间组件 -->
       <span class="demonstration">时间范围</span>
-      <el-date-picker @change="dateChange" v-model="selectDate" type="daterange" range-separator="--" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"></el-date-picker>
+      <el-date-picker
+        @change="dateChange"
+        v-model="selectDate"
+        type="daterange"
+        range-separator="--"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions"
+      ></el-date-picker>
       <span class="demonstration">搜索关键字</span>
       <el-input v-model="searchMap.name" style="width: 20%" placeholder="请输入小区名称"></el-input>
       <el-button type="warning" icon="el-icon-search" @click="search()">搜索</el-button>
       <!-- 页面主体内容 -->
       <xblock>
-        <button class="layui-btn layui-btn-danger" @click="delAll()" :disabled="checkedIDs == ''"><i class="layui-icon">&#xe640;</i>批量删除</button>
-        <button class="layui-btn" @click="admin_add('添加','communityadd.html','1000','600')"><i class="layui-icon">&#xe608;</i>添加</button>
-        <span class="x-right" style="line-height: 40px">共有数据：<span class="layui-badge">2</span> 条</span>
+        <button class="layui-btn layui-btn-danger" @click="delAll()" :disabled="checkedIDs == ''">
+          <i class="layui-icon">&#xe640;</i>批量删除
+        </button>
+        <button class="layui-btn" @click="admin_add('添加','communityadd.html','1000','600')">
+          <i class="layui-icon">&#xe608;</i>添加
+        </button>
+        <span class="x-right" style="line-height: 40px"
+          >共有数据：<span class="layui-badge">2</span> 条</span
+        >
       </xblock>
       <table class="layui-table">
         <thead>
           <tr>
             <th>
-              <input type="checkbox" id="allChecked" :checked="checkedIDs.length === communityList.length" @click="allChecked" />
+              <input
+                type="checkbox"
+                id="allChecked"
+                :checked="checkedIDs.length === communityList.length"
+                @click="allChecked"
+              />
             </th>
             <th>ID</th>
             <th>小区编号</th>
@@ -78,18 +103,40 @@
             <td>{{item.estateCompany}}</td>
             <td>{{dateFormat(item.createTime)}}</td>
             <!-- 状态显示 -->
-            <td class="td-status"><span :class="item.status == 0 ? 'layui-btn layui-btn-normal' : 'layui-btn layui-btn-disabled' "> {{item.status == 0 ? '启用' : '停用'}} </span></td>
+            <td class="td-status">
+              <span
+                :class="item.status == 0 ? 'layui-btn layui-btn-normal' : 'layui-btn layui-btn-disabled' "
+              >
+                {{item.status == 0 ? '启用' : '停用'}}
+              </span>
+            </td>
             <td class="td-manage">
               <!-- 状态控制按钮 -->
-              <a style="text-decoration: none" @click="item.status == 0 ? admin_stop(item.id):admin_start(item.id)" href="javascript:;" :title="item.status == 0 ? '停用' : '启用'">
+              <a
+                style="text-decoration: none"
+                @click="item.status == 0 ? admin_stop(item.id):admin_start(item.id)"
+                href="javascript:;"
+                :title="item.status == 0 ? '停用' : '启用'"
+              >
                 <i class="layui-icon" v-if="item.status == 0">&#xe601;</i>
                 <i class="layui-icon" v-else>&#xe62f;</i>
               </a>
               <!-- 编辑按钮 -->
-              <a title="编辑" href="javascript:;" @click="community_edit('编辑','communityadd.html',item.id,'1000','600')" class="ml-5" style="text-decoration: none">
+              <a
+                title="编辑"
+                href="javascript:;"
+                @click="community_edit('编辑','communityadd.html',item.id,'1000','600')"
+                class="ml-5"
+                style="text-decoration: none"
+              >
                 <i class="layui-icon">&#xe642;</i>
               </a>
-              <a title="删除" href="javascript:;" @click="admin_delone(item.id)" style="text-decoration: none">
+              <a
+                title="删除"
+                href="javascript:;"
+                @click="admin_delone(item.id)"
+                style="text-decoration: none"
+              >
                 <i class="layui-icon">&#xe640;</i>
               </a>
             </td>
@@ -97,7 +144,17 @@
         </tbody>
       </table>
       <!-- 分页 -->
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-size="pageSize" layout="prev, pager, next, sizes" :page-sizes="[2,10,20]" style="text-align: right" :total="total"> </el-pagination>
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        layout="prev, pager, next, sizes"
+        :page-sizes="[2,10,20]"
+        style="text-align: right"
+        :total="total"
+      >
+      </el-pagination>
     </div>
     <script src="lib/layui/layui.js" charset="utf-8"></script>
     <script src="js/x-layui.js" charset="utf-8"></script>
@@ -319,13 +376,14 @@
               w = 800
             }
             if (h == null || h == '') {
-              h = $(window).height() - 50
+              h = $(window).height() - 100
             }
 
             layer.open({
               type: 2,
               area: [w + 'px', h + 'px'],
-              fix: false, //不固定
+              offset: '30px',
+              fix: true, //不固定
               maxmin: true,
               shadeClose: true,
               shade: 0.4,
