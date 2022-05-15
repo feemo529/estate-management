@@ -20,7 +20,12 @@ public class MessageConstant {
     public static final String BUILDING_UPDATE_SUCCESS="修改楼栋信息成功！";
     public static final String BUILDING_DELETE_SUCCESS="删除楼栋信息成功！";
     public static final String BUILDING_FIND_BY_ID_SUCCESS = "根据主键获取楼栋对象成功！";
-
+    //---------------------------楼栋（Building）操作消息提示信息---------------------------------------
+    public static final String HOUSE_SEARCH_SUCCESS="查询楼栋列表信息成功！";
+    public static final String HOUSE_ADD_SUCCESS="新增楼栋信息成功！";
+    public static final String HOUSE_UPDATE_SUCCESS="修改楼栋信息成功！";
+    public static final String HOUSE_DELETE_SUCCESS="删除楼栋信息成功！";
+    public static final String HOUSE_FIND_BY_ID_SUCCESS = "根据主键获取楼栋对象成功！";
     //---------------------------系统提示信息----------------------------------------------------------
     public static final String SYSTEM_BUSY = "系统繁忙，请求稍后重试！";
     //---------------------------文件上传提示信息-------------------------------------------------------

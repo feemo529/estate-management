@@ -1,8 +1,8 @@
 package com.estate.estatemanagement.service.impl;
 
-import com.estate.estatemanagement.dao.BuildingMapper;
-import com.estate.estatemanagement.domain.Building;
-import com.estate.estatemanagement.service.BuildingService;
+import com.estate.estatemanagement.dao.HouseMapper;
+import com.estate.estatemanagement.domain.House;
+import com.estate.estatemanagement.service.HouseService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,21 +14,21 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class BuildingServiceImpl implements BuildingService {
+public class HouseServiceImpl implements HouseService {
 
     @Autowired
-    private BuildingMapper buildingMapper;
+    private HouseMapper houseMapper;
 
     @Override
-    public List<Building> finAll() {
-        List<Building> buildings = buildingMapper.selectAll();
-        return buildings;
+    public List<House> finAll() {
+        List<House> houses = houseMapper.selectAll();
+        return houses;
     }
 
     @Override
-    public Page<Building> search(Map searchMap) {
+    public Page<House> search(Map searchMap) {
         // 通用Mapper 多条件搜索，标准写法
-        Example example = new Example(Building.class);
+        Example example = new Example(House.class);
         // 1.初始化条件
         int pageNum = 1;
         int pageSize = 2;
@@ -55,13 +55,13 @@ public class BuildingServiceImpl implements BuildingService {
 
         }
         PageHelper.startPage(pageNum,pageSize); // 使用 pageHelper 插件完成分页
-        Page<Building> buildings = (Page<Building>) buildingMapper.selectByExample(example);
-        return buildings;
+        Page<House> houses = (Page<House>) houseMapper.selectByExample(example);
+        return houses;
     }
 
     @Override
-    public Boolean add(Building building) {
-        int row =  buildingMapper.insert(building);
+    public Boolean add(House house) {
+        int row =  houseMapper.insert(house);
         if(row > 0) {
             return true;
         } else {
@@ -70,13 +70,13 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public Building findById(Integer id) {
-        return buildingMapper.selectByPrimaryKey(id);
+    public House findById(Integer id) {
+        return houseMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public Boolean update(Building building) {
-        int row =  buildingMapper.updateByPrimaryKey(building);
+    public Boolean update(House house) {
+        int row =  houseMapper.updateByPrimaryKey(house);
         if(row > 0) {
             return true;
         } else {
@@ -88,7 +88,7 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public Boolean del(List<Integer> ids) {
         for(Integer id:ids) {
-            buildingMapper.deleteByPrimaryKey(id);
+            houseMapper.deleteByPrimaryKey(id);
         }
         return true;
     }
